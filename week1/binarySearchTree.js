@@ -130,17 +130,17 @@ class BinarySearchTree {
    * @param {number} searchVal The number to search for in the node's data.
    * @returns {boolean} Indicates if the searchVal was found.
    */
-  containsRecursive(searchVal, current = this.root) { 
-      if(current === null){
-        return false;
-      }
-      if (current.data === searchVal) {
-        return true;
-      }
-      if (current.data > searchVal) {
-        return this.containsRecursive(searchVal, current.left)
-      }
-      return this.containsRecursive(searchVal, current.right)
+  containsRecursive(searchVal, current = this.root) {
+    if (current === null) {
+      return false;
+    }
+    if (current.data === searchVal) {
+      return true;
+    }
+    if (current.data > searchVal) {
+      return this.containsRecursive(searchVal, current.left)
+    }
+    return this.containsRecursive(searchVal, current.right)
   }
   /**
    * Calculates the range (max - min) from the given startNode.
@@ -172,6 +172,86 @@ class BinarySearchTree {
      * @returns {number} The largest integer from this tree.
      */
   maxRecursive(current = this.root) { }
+
+
+  /**
+  * Inserts a new node with the given newVal in the right place to preserver
+  * the order of this tree.
+  * - Time: O(?).
+  * - Space: O(?).
+  * @param { number } newVal The data to be added to a new node.
+  * @returns { BinarySearchTree } This tree.
+  */
+  insert(newVal) {
+    const newNode = new BSTNode(newVal)
+    if (this.isEmpty()) {
+      this.root = newNode
+      return this;
+    }
+    let current = this.root;
+    while (true) {
+      if (current.data === newVal) {
+        console.log("value already exists")
+        return this;
+      }
+      if (current.data > newVal) {
+        if (!current.left) {
+          current.left = newNode
+          return this;
+        }
+        current = current.left
+      }
+      if (current.data < newVal) {
+        if (!current.right) {
+          current.right = newNode
+          return this;
+        }
+        current = current.right
+      }
+    }
+  }
+
+  /**
+   * Inserts a new node with the given newVal in the right place to preserver
+   * the order of this tree.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @param {number} newVal The data to be added to a new node.
+   * @param {Node} curr The node that is currently accessed from the tree as
+   *    the tree is being traversed.
+   * @returns {BinarySearchTree} This tree.
+   */
+  insertRecursive(newVal, curr = this.root) {
+    const newNode = new BSTNode(newVal)
+    if (this.isEmpty()) {
+      this.root = newNode
+      return this;
+    }
+
+    if (curr.data === newVal) {
+      console.log("value already exists")
+      return this;
+    }
+    if (curr.data > newVal) {
+      if (!curr.left) {
+        curr.left = newNode
+        return this;
+      }
+      this.insertRecursive(newVal, curr.left)
+    }
+    if (curr.data < newVal) {
+      if (!curr.right) {
+        curr.right = newNode
+        return this;
+      }
+      this.insertRecursive(newVal, curr.right)
+    }
+  }
+
+
+
+
+
 
   // Logs this tree horizontally with the root on the left.
   print(node = this.root, spaceCnt = 0, spaceIncr = 10) {
