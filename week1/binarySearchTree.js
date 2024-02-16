@@ -340,6 +340,78 @@ toArrPostorder(node = this.root, vals = []) {
 return vals;
 } //! END THURSDAY
 
+    /* fullTree
+                        root
+                    <-- 25 -->
+                  /            \
+                15             50
+              /    \         /    \
+            10     22      35     70
+          /   \   /  \    /  \   /  \
+        4    12  18  24  31  44 66  90
+    /**
+
+    /**
+     * BFS order: horizontal rows top-down left-to-right.
+     * Converts this BST into an array following Breadth First Search order.
+     * Example on the fullTree var:
+     * [25, 15, 50, 10, 22, 35, 70, 4, 12, 18, 24, 31, 44, 66, 90]
+     * @param {Node} current The current node during the traversal of this tree.
+     * @returns {Array<number>} The data of all nodes in BFS order.
+     */
+    toArrLevelorder(current = this.root) {
+      let vals = []
+      let queue = []
+      queue.push(current)
+      while(queue.length > 0){
+        const currentNode = queue.shift()
+        vals.push(currentNode.data)
+        if(currentNode.left != null){
+          queue.push(currentNode.left)
+        }
+        if(currentNode.right != null){
+          queue.push(currentNode.right)
+        }
+      }
+      return vals;
+    }
+
+    /**
+     * Recursively counts the total number of nodes in this tree.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {Node} node The current node during the traversal of this tree.
+     * @returns {number} The total number of nodes.
+     */
+    size(node = this.root, counter = []) {
+      if(this.isEmpty()){
+        return 0;
+      }
+      if(node){
+        this.size(node.left, counter)
+        this.size(node.right, counter)
+        counter.push(1)
+      }
+      return counter.length;
+    }
+
+    size2(node = this.root){
+      return this.toArrLevelorder.length
+    }
+    /**
+     * Calculates the height of the tree which is based on how many nodes from
+     * top to bottom (whichever side is taller).
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {Node} node The current node during traversal of this tree.
+     * @returns {number} The height of the tree.
+     */
+    height(node = this.root) {
+        if(!node){
+          return 0
+        }
+        return 1+Math.max(this.height(node.left), this.height(node.right))
+    }
 
   // Logs this tree horizontally with the root on the left.
   print(node = this.root, spaceCnt = 0, spaceIncr = 10) {
@@ -389,7 +461,7 @@ twoLevelTree.root.right = new BSTNode(15);
       /   \
     5     15
   / \    / \
-2   6  13  
+    6  13  
 */
 const threeLevelTree = new BinarySearchTree();
 threeLevelTree.root = new BSTNode(10);
