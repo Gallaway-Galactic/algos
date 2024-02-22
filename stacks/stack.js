@@ -117,6 +117,10 @@ class LinkedListStack {
     }
 }
 
+
+
 const myStack = new Stack()
 const myLLStack = new LinkedListStack()
 myLLStack.push(42);
+
+module.exports = Stack; // for moving stack to Queue file for built in methods

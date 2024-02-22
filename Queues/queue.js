@@ -3,6 +3,10 @@
  * Follows a FIFO (First In First Out) order where new items are added to the
  * back and items are removed from the front.
  */
+
+const Stack = require("../stacks/stack.js") // required for isPalindrome method. also need a built stack method, change path to match your files
+
+
 class Queue {
     constructor() {
         this.items = [];
@@ -61,6 +65,75 @@ class Queue {
     size() {
         return this.items.length
     }
+
+    /**
+ * Compares this queue to another given queue to see if they are equal.
+ * Avoid indexing the queue items directly via bracket notation, use the
+ * queue methods instead for practice.
+ * Use no extra array or objects.
+ * The queues should be returned to their original order when done.
+ * - Time: O(?).
+ * - Space: O(?).
+ * @param {Queue} q2 The queue to be compared against this queue.
+ * @returns {boolean} Whether all the items of the two queues are equal and
+ *    in the same order.
+ */
+    compareQueues(q2, mainQ=this) { 
+        if(this.size() != q2.size()){
+            return false;
+        }
+        if(mainQ.front() != q2.front()){
+            return false;
+        }
+        if(mainQ.front() == q2.front()){
+            return true;
+        }
+        this.compareQueues(q2.dequeue(), mainQ.dequeue())
+    }
+
+    compareQueuesLoop(q2) { 
+        if(this.size() != q2.size()){
+            return false;
+        }
+        for(let i =0; i<this.size();i++){
+            if(this.items[i] == q2.items[i]){
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Determines if the queue is a palindrome (same items forward and backwards).
+     * Avoid indexing queue items directly via bracket notation, instead use the
+     * queue methods for practice.
+     * Use only 1 stack as additional storage, no other arrays or objects.
+     * The queue should be returned to its original order when done.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @returns {boolean}
+     */
+    isPalindrome() { 
+        let stack = new Stack()
+        for(let i = 0; i < this.size(); i++){
+            let dequeued = this.dequeue()
+            stack.push(dequeued)
+            this.enqueue(dequeued)
+        }
+        for(let j = 0; j < this.size(); j++){
+            if(this.front() == stack.peek()){
+                let dequeued = this.dequeue()
+                stack.pop()
+                this.enqueue(dequeued)
+            }
+            else{
+                return false;
+            }
+        }
+        return true;
+    }
 }
 
 /* Rebuild the above class using a linked list instead of an array. */
@@ -118,6 +191,15 @@ class LLQ {
 
 }
 
-const myQll = new LLQ()
+const newQ = new Queue()
 
-console.log(myQll.enqueue(1))
+myQ.enqueue(1)
+myQ.enqueue(2)
+myQ.enqueue(2)
+myQ.enqueue(1)
+
+
+newQ.enqueue(1)
+newQ.enqueue(2)
+newQ.enqueue(1)
+newQ.enqueue(2)
