@@ -95,20 +95,20 @@ class DoublyLinkedList {
      * - Space: O(?).
      * @returns {any} The data of the removed node.
      */
-    removeMiddleNode() { 
-        if(this.head.next === null){
+    removeMiddleNode() {
+        if (this.head.next === null) {
             const removed = this.head.data
             this.head = null;
             this.tail = null;
             this.size--
             return removed;
         }
-        if(this.size%2==0){
+        if (this.size % 2 == 0) {
             console.log("Our list is an even amount, there is no direct middle.")
             return this;
         }
         let runner = this.head
-        for(let i = 0; i<Math.floor(this.size/2);i++){
+        for (let i = 0; i < Math.floor(this.size / 2); i++) {
             runner = runner.next
         }
         let prevRunner = runner.prev
@@ -127,6 +127,68 @@ class DoublyLinkedList {
      */
     isEmpty() {
         return this.head === null;
+    }
+
+    /**
+ * Inserts a new node with the given newVal after the node that has the
+ * given targetVal as it's data.
+ * - Time: O(?).
+ * - Space: O(?).
+ * @param {any} targetVal The node data to find.
+ * @param {any} newVal Data for the new node.
+ * @returns {boolean} Indicates if the new node was added.
+ */
+    insertAfter(targetVal, newVal) {
+        if (this.isEmpty()) {
+            return false;
+        }
+
+        let runner = this.head
+        let newNode = new ListNode(newVal);
+        while (runner.next) {
+            if (runner.data === targetVal) {
+                let temp = runner.next
+                runner.next = newNode
+                newNode.next = temp
+                temp.prev = newNode
+                newNode.prev = runner
+                this.length++
+                return true;
+            }
+            runner = runner.next
+        }
+        return false;
+    }
+
+    /**
+     * Inserts a new node with the given newVal before the node that has the
+     * given targetVal as it's data.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {any} targetVal The node data to find.
+     * @param {any} newVal Data for the new node.
+     * @returns {boolean} Indicates if the new node was added.
+     */
+    insertBefore(targetVal, newVal) {
+        if (this.isEmpty()) {
+            return false;
+        }
+
+        let runner = this.head
+        let newNode = new ListNode(newVal);
+        while (runner.next) {
+            if (runner.next.data === targetVal) {
+                let temp = runner.next
+                runner.next = newNode
+                newNode.next = temp
+                temp.prev = newNode
+                newNode.prev = runner
+                this.length++
+                return true;
+            }
+            runner = runner.next
+        }
+        return false;
     }
 
     /**
