@@ -3,24 +3,8 @@ TODO: Create the DLLNode class and implement the DoublyLinkedList constructor
 and the empty methods below the constructor.
 */
 class ListNode {
-    /**
-     * Constructs a new Node instance. Executed when the 'new' keyword is used.
-     * @param {any} data The data to be added into this new instance of a Node.
-     *    The data can be anything, just like an array can contain strings,
-     *    numbers, objects, etc.
-     * @returns {ListNode} A new Node instance is returned automatically without
-     *    having to be explicitly written (implicit return).
-     */
     constructor(data) {
         this.data = data;
-        /**
-         * This property is used to link this node to whichever node is next
-         * in the list. By default, this new node is not linked to any other
-         * nodes, so the setting / updating of this property will happen sometime
-         * after this node is created.
-         *
-         * @type {ListNode|null}
-         */
         this.next = null;
         this.prev = null;
     }
@@ -39,7 +23,7 @@ class DoublyLinkedList {
         // TODO: implement the constructor.
         this.head = null;
         this.tail = null;
-        this.size = 0
+        this.size = 0;
     }
 
     /**
@@ -49,21 +33,7 @@ class DoublyLinkedList {
      * @param {any} data The data for the new node.
      * @returns {DoublyLinkedList} This list.
      */
-    insertAtFront(data) {
-        const newNode = new ListNode(data)
-        if (this.isEmpty()) {
-            this.head = newNode;
-            this.tail = newNode;
-            this.size++
-            return this;
-        }
-        let oldHead = this.head
-        this.head = newNode;
-        newNode.next = oldHead;
-        oldHead.prev = newNode;
-        this.size++
-        return this;
-    }
+    insertAtFront(data) { }
 
     /**
      * Creates a new node and adds it at the back of this list.
@@ -88,6 +58,7 @@ class DoublyLinkedList {
         return this;
     }
 
+
     // EXTRA
     /**
      * Removes the middle node in this list.
@@ -95,29 +66,7 @@ class DoublyLinkedList {
      * - Space: O(?).
      * @returns {any} The data of the removed node.
      */
-    removeMiddleNode() {
-        if (this.head.next === null) {
-            const removed = this.head.data
-            this.head = null;
-            this.tail = null;
-            this.size--
-            return removed;
-        }
-        if (this.size % 2 == 0) {
-            console.log("Our list is an even amount, there is no direct middle.")
-            return this;
-        }
-        let runner = this.head
-        for (let i = 0; i < Math.floor(this.size / 2); i++) {
-            runner = runner.next
-        }
-        let prevRunner = runner.prev
-        let nextRunner = runner.next
-        prevRunner.next = runner.next
-        nextRunner.prev = runner.prev
-        this.size--
-        return runner.data
-    }
+    removeMiddleNode() { }
 
     /**
      * Determines if this list is empty.
@@ -128,6 +77,7 @@ class DoublyLinkedList {
     isEmpty() {
         return this.head === null;
     }
+
 
     /**
  * Inserts a new node with the given newVal after the node that has the
@@ -192,6 +142,147 @@ class DoublyLinkedList {
     }
 
     /**
+   * Retrieves the data from the nthLast node in this list.
+   * - Time: O(?).
+   * - Space: O(?).
+   * @param {number} nthLast Indicates the position from the back of the list.
+   * @returns {any}
+   */
+    nthToLast(nthLast) {
+        if (this.size <= nthLast) {
+            return null;
+        }
+
+        let runner = this.tail;
+        let counter = 0;
+        while (counter < nthLast) {
+            runner = runner.prev;
+            counter++
+        }
+
+        return runner
+    }
+
+    /**
+     * Determines if the node's data of this list forms a palindrome.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @returns {boolean} Indicates if this list is a palindrome.
+     */
+    isPalindrome() {
+        if (this.isEmpty()) {
+            return false;
+        }
+        let half = Math.ceil(this.size / 2);
+        console.log(half)
+        let frontRunner = this.head;
+        let backRunner = this.tail;
+
+        for (let i = 0; i < half; i++) {
+            if (frontRunner.data !== backRunner.data) {
+                return false
+            }
+            frontRunner = frontRunner.next;
+            backRunner = backRunner.prev;
+        }
+
+        return true;
+
+
+    }
+
+    /**
+     * Determines if a given node in this list is in the left half of this list.
+     * - Time: O(?).
+     * - Space: O(?).
+     * @param {Node} node
+     * @returns {boolean}
+     */
+    isNodeInLeftHalf(node) {
+        if (this.isEmpty()) {
+            return false
+        }
+        let half = Math.ceil(this.size / 2);
+        let runner = this.head;
+
+        while (half > 0) {
+            if (runner === node) {
+                return true;
+            }
+            runner = runner.next;
+            half--;
+        }
+        return false;
+    }
+
+    /**
+ * Finds the given node in this list and removes it.
+ * - Time: O(1) constant.
+ * - Space: O(1) constant.
+ * @param {DLLNode} node A node in this list.
+ * @returns {DoublyLinkedList} This list.
+ */
+    removeNode(node) {
+        if (this.isEmpty()) {
+            return this
+        }
+
+        let runner = this.head;
+
+        while (runner.next) {
+            if (runner === node) {
+                let past = runner.prev;
+                let future = runner.next;
+                past.next = future;
+                future.prev = past;
+                this.size--;
+                return this;
+            }
+            runner = runner.next;
+
+        }
+        return this;
+    }
+
+    /**
+     * Removes the head node from this list.
+     * - Time: O(1) constant.
+     * - Space: O(1) constant.
+     * @param {DLLNode} node A node in this list.
+     * @returns {DoublyLinkedList} This list.
+     */
+    removeHead() {
+        if (this.isEmpty()) {
+            return this;
+        }
+
+        let oldHead = this.head;
+        this.head = this.head.next;
+        oldHead.next.prev = null;
+        this.size--
+        return this;
+    }
+
+    /**
+     * Removes the tail node from this list.
+     * - Time: O(1) constant.
+     * - Space: O(1) constant.
+     * @param {DLLNode} node A node in this list.
+     * @returns {DoublyLinkedList} This list.
+    */
+    removeTail() {
+        if (this.isEmpty()) {
+            return this;
+        }
+        let oldTail = this.tail;
+        this.tail = this.tail.prev;
+        oldTail.prev.next = null;
+        this.size--
+        return this;
+
+    }
+
+    /**
      * Converts this list to an array of the node's data.
      * - Time: O(n) linear, n = list length.
      * - Space: O(n) linear, array grows as list length increases.
@@ -219,7 +310,6 @@ class DoublyLinkedList {
     }
 }
 
-const emptyList = new DoublyLinkedList();
 
 /**************** Uncomment these test lists after insertAtBack is created. ****************/
 const singleNodeList = new DoublyLinkedList().insertAtBack(1);
@@ -235,4 +325,9 @@ const unorderedList = new DoublyLinkedList().insertAtBackMany([
     1,
     -7,
     -2,
+    7
 ]);
+
+const palentest = new DoublyLinkedList().insertAtBackMany([1, 2, 3, 4, 5, 6, 7, 8]);
+let node1 = palentest.nthToLast(2);
+let node2 = palentest.nthToLast(6);
